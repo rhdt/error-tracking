@@ -446,7 +446,7 @@ objects:
             valueFrom:
                secretKeyRef:
                  name: sentry-db
-                 key: POSTGRESQL_DATABASE
+                 key: POSTGRESQL_HOSTNAME
           envFrom:
           - secretRef:
               name: sentry-general
@@ -518,7 +518,7 @@ objects:
             valueFrom:
               secretKeyRef:
                 name: sentry-db
-                key: POSTGRESQL_DATABASE
+                key: POSTGRESQL_HOSTNAME
           - name: SENTRY_USE_SSL
             value: "true"
           envFrom:
@@ -599,7 +599,7 @@ objects:
             valueFrom:
               secretKeyRef:
                 name: sentry-db
-                key: POSTGRESQL_DATABASE
+                key: POSTGRESQL_HOSTNAME
           - name: C_FORCE_ROOT
             value: "TRUE"
           envFrom:
