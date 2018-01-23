@@ -20,7 +20,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: sentry-db
-              key: POSTGRESQL_DATABASE
+              key: POSTGRESQL_HOSTNAME
       envFrom:
        - secretRef:
            name: sentry-general
