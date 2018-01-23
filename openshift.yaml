@@ -1,10 +1,14 @@
 apiVersion: v1
 kind: Template
 metadata:
-  creationTimestamp: null
   name: saas-sentry
 objects:
 - apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    labels:
+      service: sentry
+    name: sentry
   data:
     sentry.conf.py: |-
       # This file is just Python, with a touch of Django which means
@@ -321,16 +325,9 @@ objects:
       if 'BITBUCKET_CONSUMER_KEY' in os.environ:
           BITBUCKET_CONSUMER_KEY = env('BITBUCKET_CONSUMER_KEY')
           BITBUCKET_CONSUMER_SECRET = env('BITBUCKET_CONSUMER_SECRET')
-  kind: ConfigMap
-  metadata:
-    creationTimestamp: null
-    labels:
-      service: sentry
-    name: sentry
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
-    creationTimestamp: null
     generation: 1
     labels:
       run: redis
@@ -352,12 +349,11 @@ objects:
       type: Rolling
     template:
       metadata:
-        creationTimestamp: null
         labels:
           run: redis
       spec:
         containers:
-        - image: registry.centos.org/centos/redis-32-centos7:${IMAGE_TAG_REDIS}
+        - image: registry.centos.org/centos/redis-32-centos7:latest
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 3
@@ -403,14 +399,9 @@ objects:
     replicas: 0
     unavailableReplicas: 0
     updatedReplicas: 0
-  parameters:
-    - name: IMAGE_TAG_REDIS
-      value: latest
-      required: true
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
-    creationTimestamp: null
     generation: 1
     labels:
       run: sentry-cron
@@ -432,7 +423,6 @@ objects:
       type: Rolling
     template:
       metadata:
-        creationTimestamp: null
         labels:
           run: sentry-cron
       spec:
@@ -450,7 +440,7 @@ objects:
           envFrom:
           - secretRef:
               name: sentry-general
-          image: sentry:${IMAGE_TAG_SENTRY}
+          image: sentry:8.22
           imagePullPolicy: Always
           name: sentry-cron
           resources: {}
@@ -479,14 +469,9 @@ objects:
     replicas: 0
     unavailableReplicas: 0
     updatedReplicas: 0
-  parameters:
-    - name: IMAGE_TAG_SENTRY
-      value: 8.22
-      required: true
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
-    creationTimestamp: null
     generation: 1
     labels:
       run: sentry-web
@@ -508,7 +493,6 @@ objects:
       type: Rolling
     template:
       metadata:
-        creationTimestamp: null
         labels:
           run: sentry-web
       spec:
@@ -524,7 +508,7 @@ objects:
           envFrom:
           - secretRef:
               name: sentry-general
-          image: sentry:${IMAGE_TAG_SENTRY}
+          image: sentry:8.22
           imagePullPolicy: Always
           name: sentry-web
           ports:
@@ -556,14 +540,9 @@ objects:
     replicas: 0
     unavailableReplicas: 0
     updatedReplicas: 0
-  parameters:
-    - name: IMAGE_TAG_SENTRY
-      value: 8.22
-      required: true
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
-    creationTimestamp: null
     generation: 1
     labels:
       run: sentry-worker
@@ -585,7 +564,6 @@ objects:
       type: Rolling
     template:
       metadata:
-        creationTimestamp: null
         labels:
           run: sentry-worker
       spec:
@@ -606,8 +584,8 @@ objects:
           - secretRef:
               name: sentry-general
           - secretRef:
-              name: s3
-          image: sentry:${IMAGE_TAG_SENTRY}
+              name: sentry-s3
+          image: sentry:8.22
           imagePullPolicy: Always
           name: sentry-worker
           resources: {}
@@ -636,14 +614,9 @@ objects:
     replicas: 0
     unavailableReplicas: 0
     updatedReplicas: 0
-  parameters:
-    - name: IMAGE_TAG_SENTRY
-      value: 8.22
-      required: true
 - apiVersion: v1
   kind: Service
   metadata:
-    creationTimestamp: null
     labels:
       run: redis
       service: sentry
@@ -659,13 +632,9 @@ objects:
     type: ClusterIP
   status:
     loadBalancer: {}
-  parameters:
-    - name: IMAGE_TAG_REDIS
-      value: latest
 - apiVersion: v1
   kind: Service
   metadata:
-    creationTimestamp: null
     labels:
       run: sentry
       service: sentry
