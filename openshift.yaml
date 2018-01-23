@@ -272,6 +272,18 @@ objects:
           # 'workers': 3,  # the number of web workers
       }
 
+      ghappid = env('GITHUB_APP_ID')
+      ghapisecret = env('GITHUB_API_SECRET')
+
+      if ghappid:
+           GITHUB_AP_ID = ghappid
+
+      if ghapisecret:
+           GITHUB_API_SECRET = ghapisecret
+
+      if ghappid and ghapisecret:
+           GITHUB_EXTENDED_PERMISSIONS = ['repo']
+     
       ###############
       # Mail Server #
       ###############
@@ -506,8 +518,10 @@ objects:
           - name: SENTRY_USE_SSL
             value: "true"
           envFrom:
-          - secretRef:
-              name: sentry-general
+           - secretRef:
+               name: sentry-general
+           - secretRef:
+               name: sentry-github-oauth
           image: sentry:8.22
           imagePullPolicy: Always
           name: sentry-web
@@ -581,10 +595,12 @@ objects:
           - name: C_FORCE_ROOT
             value: "TRUE"
           envFrom:
-          - secretRef:
-              name: sentry-general
-          - secretRef:
-              name: sentry-s3
+           - secretRef:
+               name: sentry-general
+           - secretRef:
+               name: sentry-github-oauth
+           - secretRef:
+               name: sentry-s3
           image: sentry:8.22
           imagePullPolicy: Always
           name: sentry-worker
