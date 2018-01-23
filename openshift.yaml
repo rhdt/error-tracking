@@ -446,7 +446,7 @@ objects:
             valueFrom:
                secretKeyRef:
                  name: sentry-db
-                 value: POSTGRESQL_DATABASE
+                 key: POSTGRESQL_DATABASE
           envFrom:
           - secretRef:
               name: sentry-general
