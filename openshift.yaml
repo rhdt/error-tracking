@@ -328,104 +328,6 @@ objects:
       service: sentry
     name: sentry
 - apiVersion: v1
-  kind: PersistentVolumeClaim
-  metadata:
-    annotations:
-      pv.kubernetes.io/bind-completed: "yes"
-      pv.kubernetes.io/bound-by-controller: "yes"
-    creationTimestamp: null
-    labels:
-      service: sentry
-    name: postgres-data
-  spec:
-    accessModes:
-    - ReadWriteOnce
-    resources:
-      requests:
-        storage: 1Gi
-    volumeName: pv0019
-  status: {}
-- apiVersion: v1
-  kind: DeploymentConfig
-  metadata:
-    creationTimestamp: null
-    generation: 1
-    labels:
-      app: postgresql-96-centos7
-      service: sentry
-    name: postgresql-96-centos7
-  spec:
-    replicas: 1
-    selector:
-      app: postgresql-96-centos7
-      deploymentconfig: postgresql-96-centos7
-    strategy:
-      activeDeadlineSeconds: 21600
-      recreateParams:
-        timeoutSeconds: 600
-      resources: {}
-      rollingParams:
-        intervalSeconds: 1
-        maxSurge: 25%
-        maxUnavailable: 25%
-        post:
-          execNewPod:
-            command:
-            - /bin/sh
-            - -c
-            - hostname && sleep 10 && psql -d $POSTGRESQL_DATABASE -c "CREATE EXTENSION IF NOT EXISTS citext;"
-            containerName: postgresql-96-centos7
-          failurePolicy: ""
-        timeoutSeconds: 600
-        updatePeriodSeconds: 1
-      type: Recreate
-    template:
-      metadata:
-        creationTimestamp: null
-        labels:
-          app: postgresql-96-centos7
-          deploymentconfig: postgresql-96-centos7
-      spec:
-        containers:
-        - envFrom:
-          - secretRef:
-              name: db
-          image: registry.centos.org/centos/postgresql-96-centos7:${IMAGE_TAG_PGSQL}
-          imagePullPolicy: Always
-          name: postgresql-96-centos7
-          ports:
-          - containerPort: 5432
-            protocol: TCP
-          resources: {}
-          terminationMessagePath: /dev/termination-log
-          terminationMessagePolicy: File
-          volumeMounts:
-          - mountPath: /var/lib/pgsql/data
-            name: postgres-data
-        dnsPolicy: ClusterFirst
-        restartPolicy: Always
-        schedulerName: default-scheduler
-        securityContext: {}
-        terminationGracePeriodSeconds: 30
-        volumes:
-        - name: postgres-data
-          persistentVolumeClaim:
-            claimName: postgres-data
-    test: false
-    triggers:
-    - type: ConfigChange
-  status:
-    availableReplicas: 0
-    latestVersion: 0
-    observedGeneration: 0
-    replicas: 0
-    unavailableReplicas: 0
-    updatedReplicas: 0
-  parameters:
-    - name: IMAGE_TAG_PGSQL
-      value: latest
-      required: true
-- apiVersion: v1
   kind: DeploymentConfig
   metadata:
     creationTimestamp: null
@@ -541,7 +443,7 @@ objects:
           - cron
           env:
           - name: SENTRY_POSTGRES_HOST
-            value: db
+            value: sentry-db
           envFrom:
           - secretRef:
               name: sentry-general
@@ -610,7 +512,7 @@ objects:
         containers:
         - env:
           - name: SENTRY_POSTGRES_HOST
-            value: db
+            value: sentry-db
           - name: SENTRY_USE_SSL
             value: "true"
           envFrom:
@@ -688,7 +590,7 @@ objects:
           - worker
           env:
           - name: SENTRY_POSTGRES_HOST
-            value: db
+            value: sentry-db
           - name: C_FORCE_ROOT
             value: "TRUE"
           envFrom:
@@ -734,27 +636,6 @@ objects:
   metadata:
     creationTimestamp: null
     labels:
-      app: postgresql-96-centos7
-      service: sentry
-    name: db
-  spec:
-    ports:
-    - name: 5432-tcp
-      port: 5432
-      protocol: TCP
-      targetPort: 5432
-    selector:
-      app: postgresql-96-centos7
-      deploymentconfig: postgresql-96-centos7
-    sessionAffinity: None
-    type: ClusterIP
-  status:
-    loadBalancer: {}
-- apiVersion: v1
-  kind: Service
-  metadata:
-    creationTimestamp: null
-    labels:
       run: redis
       service: sentry
     name: redis
@@ -792,32 +673,3 @@ objects:
     type: ClusterIP
   status:
     loadBalancer: {}
-- apiVersion: v1
-  kind: Route
-  metadata:
-    annotations:
-      kubernetes.io/tls-acme: "true"
-      openshift.io/host.generated: "true"
-    creationTimestamp: null
-    labels:
-      service: sentry
-    name: sentry-web
-  spec:
-    port:
-      targetPort: http
-    tls:
-      insecureEdgeTerminationPolicy: Redirect
-      termination: edge
-    to:
-      kind: Service
-      name: sentry
-      weight: 100
-    wildcardPolicy: None
-  status:
-    ingress:
-    - conditions:
-      - lastTransitionTime: 2018-01-23T07:25:19Z
-        status: "True"
-        type: Admitted
-      routerName: router
-      wildcardPolicy: None
