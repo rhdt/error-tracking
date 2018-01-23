@@ -17,7 +17,10 @@ spec:
           memory: 800Mi
       env:
         - name: SENTRY_POSTGRES_HOST
-          value: 'db'
+          valueFrom:
+            secretKeyRef:
+              name: sentry-db
+              key: POSTGRESQL_DATABASE
       envFrom:
        - secretRef:
            name: sentry-general
