@@ -443,7 +443,10 @@ objects:
           - cron
           env:
           - name: SENTRY_POSTGRES_HOST
-            value: sentry-db
+            valueFrom:
+               secretKeyRef:
+                 name: sentry-db
+                 value: POSTGRESQL_DATABASE
           envFrom:
           - secretRef:
               name: sentry-general
@@ -512,7 +515,10 @@ objects:
         containers:
         - env:
           - name: SENTRY_POSTGRES_HOST
-            value: sentry-db
+            valueFrom:
+              secretKeyRef:
+                name: sentry-db
+                key: POSTGRESQL_DATABASE
           - name: SENTRY_USE_SSL
             value: "true"
           envFrom:
@@ -590,7 +596,10 @@ objects:
           - worker
           env:
           - name: SENTRY_POSTGRES_HOST
-            value: sentry-db
+            valueFrom:
+              secretKeyRef:
+                name: sentry-db
+                key: POSTGRESQL_DATABASE
           - name: C_FORCE_ROOT
             value: "TRUE"
           envFrom:
