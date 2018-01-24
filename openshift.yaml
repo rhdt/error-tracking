@@ -276,7 +276,7 @@ objects:
       ghapisecret = env('GITHUB_API_SECRET')
 
       if ghappid:
-           GITHUB_AP_ID = ghappid
+           GITHUB_APP_ID = ghappid
 
       if ghapisecret:
            GITHUB_API_SECRET = ghapisecret
@@ -450,8 +450,12 @@ objects:
                  name: sentry-db
                  key: POSTGRESQL_HOSTNAME
           envFrom:
-          - secretRef:
-              name: sentry-general
+           - secretRef:
+               name: sentry-general
+           - secretRef:
+               name: sentry-github-oauth
+           - secretRef:
+               name: sentry-s3
           image: sentry:8.22
           imagePullPolicy: Always
           name: sentry-cron
@@ -522,6 +526,8 @@ objects:
                name: sentry-general
            - secretRef:
                name: sentry-github-oauth
+           - secretRef:
+               name: sentry-s3
           image: sentry:8.22
           imagePullPolicy: Always
           name: sentry-web
