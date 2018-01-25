@@ -6,7 +6,7 @@ metadata:
 spec:
   containers:
     - name: database-populator
-      image: sentry:8.22
+      image: registry.centos.org/centos/sentry-sso:8.22
       resources:
         limits:
           # for some reason this populator is consuming lots of memory
