@@ -409,7 +409,7 @@ objects:
         securityContext: {}
         terminationGracePeriodSeconds: 30
         volumes:
-          name: redis-data
+        - name: redis-data
           persistentVolumeClaim:
             claimName: redis-data
     test: false
