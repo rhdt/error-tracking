@@ -338,16 +338,6 @@ objects:
           BITBUCKET_CONSUMER_KEY = env('BITBUCKET_CONSUMER_KEY')
           BITBUCKET_CONSUMER_SECRET = env('BITBUCKET_CONSUMER_SECRET')
 - apiVersion: v1
-  kind: PersistentVolumeClaim
-  metadata:
-    name: redis-data
-  spec:
-    accessModes:
-    - ReadWriteOnce
-    resources:
-      requests:
-        storage: 1Gi
-- apiVersion: v1
   kind: DeploymentConfig
   metadata:
     generation: 1
@@ -401,7 +391,7 @@ objects:
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           volumeMounts:
-          - mountPath: /var/lib/redis/data/
+          - mountPath: /data/
             name: redis-data
         dnsPolicy: ClusterFirst
         restartPolicy: Always
@@ -409,9 +399,8 @@ objects:
         securityContext: {}
         terminationGracePeriodSeconds: 30
         volumes:
+        - emptyDir: {}
           name: redis-data
-          persistentVolumeClaim:
-            claimName: redis-data
     test: false
     triggers:
     - type: ConfigChange
