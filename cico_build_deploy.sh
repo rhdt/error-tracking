@@ -1,4 +1,4 @@
 #!/bin/bash
 echo 'nothing to build here'
-echo 'everything is awesome'
+echo 'everything might be awesome'
 exit 0
