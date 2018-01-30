@@ -365,7 +365,7 @@ objects:
           run: redis
       spec:
         containers:
-        - image: redis:3.2.11
+        - image: registry.centos.org/centos/redis-32-centos7:latest
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 3
