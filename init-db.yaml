@@ -3,6 +3,8 @@ apiVersion: v1
 metadata:
   # Initializes database with Sentry data and creates initial user
   name: database-populator
+  labels:
+    app: sentry
 spec:
   containers:
     - name: database-populator
