@@ -283,7 +283,7 @@ objects:
 
       if ghappid and ghapisecret:
            GITHUB_EXTENDED_PERMISSIONS = ['repo']
-     
+
       ###############
       # Mail Server #
       ###############
@@ -684,3 +684,8 @@ objects:
     type: ClusterIP
   status:
     loadBalancer: {}
+parameters:
+- description: Image tag
+  displayName: Image tag
+  name: IMAGE_TAG
+  value: "latest"
