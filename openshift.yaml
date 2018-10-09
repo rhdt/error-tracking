@@ -8,6 +8,7 @@ objects:
   metadata:
     labels:
       service: sentry
+      app: sentry
     name: sentry
   data:
     sentry.conf.py: |-
@@ -354,6 +355,7 @@ objects:
     labels:
       run: redis
       service: sentry
+      app: sentry
     name: redis
   spec:
     replicas: 1
@@ -373,6 +375,7 @@ objects:
       metadata:
         labels:
           run: redis
+          app: sentry
       spec:
         containers:
         - image: registry.centos.org/centos/redis-32-centos7:latest
@@ -429,6 +432,7 @@ objects:
     labels:
       run: sentry-cron
       service: sentry
+      app: sentry
     name: sentry-cron
   spec:
     replicas: 1
@@ -448,6 +452,7 @@ objects:
       metadata:
         labels:
           run: sentry-cron
+          app: sentry
       spec:
         containers:
         - command:
@@ -503,6 +508,7 @@ objects:
     labels:
       run: sentry-web
       service: sentry
+      app: sentry
     name: sentry-web
   spec:
     replicas: 2
@@ -522,6 +528,7 @@ objects:
       metadata:
         labels:
           run: sentry-web
+          app: sentry
       spec:
         containers:
         - env:
@@ -578,6 +585,7 @@ objects:
     labels:
       run: sentry-worker
       service: sentry
+      app: sentry
     name: sentry-worker
   spec:
     replicas: 1
@@ -597,6 +605,7 @@ objects:
       metadata:
         labels:
           run: sentry-worker
+          app: sentry
       spec:
         containers:
         - command:
@@ -653,6 +662,7 @@ objects:
     labels:
       run: redis
       service: sentry
+      app: sentry
     name: redis
   spec:
     ports:
@@ -671,6 +681,7 @@ objects:
     labels:
       run: sentry
       service: sentry
+      app: sentry
     name: sentry
   spec:
     ports:
