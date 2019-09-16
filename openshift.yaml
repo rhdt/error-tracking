@@ -465,8 +465,6 @@ objects:
                name: sentry-general
            - secretRef:
                name: sentry-github-oauth
-           - secretRef:
-               name: sentry-s3
           image: registry.centos.org/centos/sentry-sso:8.22
           imagePullPolicy: Always
           name: sentry-cron
@@ -537,8 +535,6 @@ objects:
                name: sentry-general
            - secretRef:
                name: sentry-github-oauth
-           - secretRef:
-               name: sentry-s3
           image: registry.centos.org/centos/sentry-sso:8.22
           imagePullPolicy: Always
           name: sentry-web
@@ -616,8 +612,6 @@ objects:
                name: sentry-general
            - secretRef:
                name: sentry-github-oauth
-           - secretRef:
-               name: sentry-s3
           image: registry.centos.org/centos/sentry-sso:8.22
           imagePullPolicy: Always
           name: sentry-worker
